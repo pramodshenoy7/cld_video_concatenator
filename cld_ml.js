@@ -1,6 +1,5 @@
 // this JS handles addition of media from Cloudinary
 let ml1, ml
-
 //ML options for video and image
 const mlOptions_video = {
             cloud_name: 'demo',
@@ -16,7 +15,6 @@ const mlOptions_image = {
 }
 window.ml1=cloudinary.createMediaLibrary(mlOptions_video, { insertHandler:insertHandler1}, "#ml_1")
 window.ml2=cloudinary.createMediaLibrary(mlOptions_image, { insertHandler:insertHandler2}, "#ml_2")
-
 //Add video manually from ML for editing
 function insertHandler1(e){
     let url = e.assets[0].secure_url
@@ -36,6 +34,7 @@ function insertHandler2(e){
     var img_box=document.getElementById('I_img');
     img_box.src=url;
     i_o_pubID=e.assets[0].public_id
+    i_o_type=e.assets[0].type;
     i_o=true; 
 }
 

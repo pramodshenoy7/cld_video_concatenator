@@ -1,0 +1,17 @@
+{
+  "name": "cld_video",
+  "version": "1.0.0",
+  "main": "cld_ml.js",
+  "dependencies": {
+    "cloudinary-core": "^2.11.3",
+    "cloudinary-video-player": "^1.5.1",
+    "lodash": "^4.17.20"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
