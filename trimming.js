@@ -31,17 +31,19 @@ var img_list=[];            //public_id of images in the search results
 var i_o_type="upload";      // image overlay type - supports type - upload and Fetch.
 
 $(document).ready(function(e){
-    //tag search logic    
+    //1 - tag search logic    
     $('#tag_search').submit(function(e) {
         e.preventDefault(); 
         document.getElementById('img_add').hidden=true;
+        //cloudinary video playlist - populate by tags
         player.playlistByTag($('#tag').val(),
             { autoAdvance: 0, presentUpcoming: 10 })
             .then(function(player) 
             {
                         console.log("Playlist loaded")
             }
-        )    
+        )
+        //search images based on tag specified
         if(document.getElementById('include_images').checked) //if images to be included for searcg based on tag
         {   
             $('#img-grid').remove();
@@ -70,8 +72,8 @@ $(document).ready(function(e){
             oReq.send(null);
         }    
     })
-     //add image into video concatenation strip
      $("#img_add").click(function(e){
+        //2 - select and add image for concatenation
         e.preventDefault()
         var element = $(".element");
         var total_element = element.length;
@@ -93,6 +95,7 @@ $(document).ready(function(e){
                 pubID[nextindex]=img[i].split('upload/')[1];
                 res_type[nextindex]="image"
                 if(total_element <= max ){
+                    //create image thumbnail in the video concatenation list
                     element.last().after('<div class="ui-state-default element" id="div_'+nextindex+'" style="width: 20%;"></div>');
                     $("#div_"+nextindex).append('<div style="position: relative;padding-bottom: 56.2%;"><img src="'+img[i]+'" style="position: absolute; object-fit: cover; width: 100%; height: 100%;"></div><div class="row"> <div class="col-7"> <select style="width:100%;height:auto;font-size:10px;" id="fade_'+nextindex+'"> <option value="">No_fade</option> <option value="">Fade_in</option> <option value="">Fade_out</option> <option value="">Fade_in_out</option> </select><br><input type="text" placeholder="dur(s)" style="width:100%;height:60%;font-size: 10;" id="dur_'+nextindex+'"></input> </div> <div class="col-5"> <div class="col-xs-1 text-center"> <a id="remove_'+nextindex+'" class="remove close"> <span> <div class="red-x">&#10006;</div> </span> </a> <input type="text" placeholder="text-overlay" style="width:100%;height:30%;font-size: 10;" id="to_'+nextindex+'"> </div> </div> </div>')
                 }else {
@@ -104,9 +107,9 @@ $(document).ready(function(e){
             }
         }
     })   
-    //video clip
-   $('#form-vid-clip').submit(function(e) {     // Finding total number of elements added
-        e.preventDefault()                      //prevent default action on submit - Page Load
+   $('#form-vid-clip').submit(function(e) {
+        //3 - add clipped video to the drag&drop area
+        e.preventDefault()                      
         var element = $(".element");
         var total_element = element.length;
         var vidURL_src = $('#demo-player_html5_api')[0].src;
@@ -124,12 +127,14 @@ $(document).ready(function(e){
         vidURL = x[0]+'upload'+ '/so_'+s_seconds+',eo_'+e_seconds+x[1]
         var nextindex = ++vid_counter;
         var max = 12;
+        //initialize key arrays to hold start_offset, end_offset, duration values of clipped videos
         so[nextindex]=s_seconds;
         eo[nextindex]=e_seconds;
         dur[nextindex]=e_seconds-s_seconds;
         pubID[nextindex]=player.currentPublicId();
         res_type[nextindex]="video";
         if(total_element <= max ){
+            //add clipped video to the concatenation list
             // Adding new div container after last occurance of element class
             element.last().after('<div class="ui-state-default element" id="div_'+nextindex+'" style="width: 20%;"></div>');
             // Adding element to <div>
@@ -152,7 +157,7 @@ $(document).ready(function(e){
         }
     });
 
-    // Remove element
+    //4 - remove clipped video and/or image from drag&drop area
     $("#sortable").on('click','.remove', function() {
         var id = this.id;
         console.log('Remove video:'+id)
@@ -162,6 +167,7 @@ $(document).ready(function(e){
             vPlayer[deleteindex].dispose();
         $("#div_" + deleteindex).remove();
     });
+    //5 - load clipped video into a newly created video element in drag&drop area
     function vsgLoadVideo(vidURL, target, nextindex) {
         console.log('Load Video function'+target)
         vgsPlayer = cld.videoPlayer(target, {
@@ -173,7 +179,7 @@ $(document).ready(function(e){
         vgsPlayer.posterOptions({ transformation: { effect: ['sepia'] } })
         vPlayer[nextindex]=vgsPlayer;
     }
-    //Final concatenate
+    //6 - concatenation
     $("#concatenate").click(function(e){
         let w = 300, h=200;
         let crop="fill";
@@ -184,6 +190,7 @@ $(document).ready(function(e){
         var element = $(".element");
         var total_element = element.length-1;
         var glob_text_o="";
+        //text overlay - pre-addition - setup
         if(t_o==true){// if text_overlay enabled, get the value of global text_overlay string
             glob_text_o=document.getElementById('T_text').value;
             if(glob_text_o==="")glob_text_o="%20";  
@@ -197,6 +204,7 @@ $(document).ready(function(e){
                 text_o[order[i-1]]=glob_text_o;
             }
             console.log(text_o)
+            //calculate duration of each of the clipped asset - image/video
             if(res_type[order[i-1]]==="image"){
                 if(document.getElementById('dur_'+order[i-1]).value===""){
                     dur[order[i-1]]=3;
@@ -204,6 +212,7 @@ $(document).ready(function(e){
                     dur[order[i-1]]=parseInt(document.getElementById('dur_'+order[i-1]).value);
                 }
             }
+            //calculate starting point of each of the clipped asset - image/video - in the ordered drag&drop area
             if(i==1){
                 vid_start[order[i-1]]=0;     
             } else
@@ -219,6 +228,7 @@ $(document).ready(function(e){
                 }
             }
         }
+    //find the last clipped video in the drag&drop list    
     var base_vid=999;
     for(i=order.length-1;i>=0;i--){
         if(res_type[order[i]]==="video"){
@@ -230,15 +240,18 @@ $(document).ready(function(e){
         
     }
     console.log("Base Video: "+base_vid)
+    //the last video found above will be used as the base video for concatenation    
     if(base_vid!=999){
         document.getElementById('concatenate_msg').hidden=true;
         transformation_str.push({"width":w, "height":h,"crop":crop,"endOffset":eo[order[base_vid]], "duration":dur[order[base_vid]]});
     } else {
         document.getElementById('concatenate_msg').hidden=false;
     }
+    //images that appear after the base video need to be concatenated in order     
     for(i=base_vid+1;i<order.length;i++){
         pub=pubID[order[i]]
         if(res_type[order[i]]==="video"){
+            //possibly this section of IF can be deleted as there would not be any videos beyond the last video in the drag&drop area
             transformation_str.push({"overlay":new cloudinary.Layer().publicId("video:"+pub),"width":w, "height":h,"crop":crop,"duration":dur[order[i]], "endOffset":eo[order[i]],"flags": "splice"})
             transformation_str.push({"flags": "layer_apply"})  
         }else{
@@ -246,6 +259,7 @@ $(document).ready(function(e){
             transformation_str.push({"flags": "layer_apply"})
         }
     }
+     //images that appear before the base video need to be concatenated in order
     for(i=base_vid-1;i>=0;i--){
         pub=pubID[order[i]]
         if(res_type[order[i]]==="video"){
@@ -255,9 +269,8 @@ $(document).ready(function(e){
             transformation_str.push({width: w, height: h, overlay: new cloudinary.Layer().publicId(pubID[order[i]]), flags: "splice", duration:dur[order[i]]})
             transformation_str.push({"flags": "layer_apply", "startOffset":"0"})
         }
-    }      
-   
-  
+    }   
+        //add the previously prepared text overlay setup to the concatenated video
         if(t_o==true){
             var t_size=parseInt(document.getElementById('t_size').value);
             if(isNaN(t_size))t_size=40;
@@ -270,6 +283,7 @@ $(document).ready(function(e){
                 transformation_str.push({overlay: new cloudinary.TextLayer().fontFamily(t_font).fontSize(t_size).text(text_o[order[i]]), gravity: t_gravity, color:t_color, y: 60, startOffset: ""+vid_start[order[i]],duration:""+dur[order[i]]})
             }
         }
+        //add image overlay
         if(i_o==true){
             console.log('image overlay added')
             var i_w= document.getElementById('I_w').value===""?"50":document.getElementById('I_w').value;
@@ -278,7 +292,7 @@ $(document).ready(function(e){
             var i_x= document.getElementById('I_x').value===""?"0":document.getElementById('I_x').value;
             var i_y= document.getElementById('I_y').value===""?"0":document.getElementById('I_y').value;
             var i_mt= document.getElementById('i_makeTransparent').checked;
-
+            //image of the type fetch needs to be accounted differently for image overlay
             if(i_o_type=="fetch"){
                 if(i_mt)
                 transformation_str.push({overlay: new cloudinary.FetchLayer().url(i_o_pubID), gravity:i_g, effect: "make_transparent:5", width: parseInt(i_w), height: parseInt(i_h), x:parseInt(i_x), y:parseInt(i_y)})
@@ -291,7 +305,7 @@ $(document).ready(function(e){
                 transformation_str.push({overlay: new cloudinary.Layer().publicId(i_o_pubID), gravity:i_g, width: parseInt(i_w), height: parseInt(i_h), x:parseInt(i_x), y:parseInt(i_y)})
             }
         }
-        console.log("Color Settings: "+c_o)
+        //add color settings to the concatenated video
         if(c_o==true){
             console.log('Color settings')
             var brightness=document.getElementById("brightness").value;
@@ -305,24 +319,24 @@ $(document).ready(function(e){
             transformation_str.push({effect:"gamma:"+gamma})
             transformation_str.push({effect:"vignette:"+vignette})
         }   
-        // console.log("T String:" + transformation_str)
-        // console.log("Order: "+order);
-        // console.log("PublicID: "+pubID)
+
         console.log(cld.videoTag(pubID[order[base_vid]], {transformation: transformation_str, controls: true, format: "mp4"}).toHtml())
+        //invoke Cloudinary JS SDK for concatenation
         var concatenated_url= cld.videoTag(pubID[order[base_vid]], {transformation: transformation_str,controls: true, format: "mp4"}).toHtml();
+        //JS SDK generates video tag with multiple srcs accounting for different formats. We are just selecting mp4 format from src list
         var el = document.createElement( 'html' );
         el.innerHTML=concatenated_url;
         let vid=el.getElementsByTagName('video')[0].cloneNode();
         let vid_src=el.getElementsByTagName('source')[1]
         vid.appendChild(vid_src)
         $('#merged').html(vid)
+        //display concatenated video URL and JS SDK
         document.getElementById('merged_url').setAttribute('href',vid_src.src)
         document.getElementById('merged_url').innerText=vid_src.src;
         $('#JS_SDK').html("cld.videoTag(\""+pubID[order[base_vid]]+"\",{transformation:"+JSON.stringify(transformation_str)+", controls:true, format: \"mp4\"})");
-        //$('#merged_url').html();
     })
 
-    //Choose image from search results for image overlay
+    //Choose an image from image search results for image overlay
     $("#I_search").click(function(e){
         e.preventDefault()
         var checkboxes = document.getElementsByClassName("img-search");
@@ -345,7 +359,7 @@ $(document).ready(function(e){
         }
     })
     
-    //text_overlay toggle
+    //add text_overlay related html elements to DOM on enabling text_overlay
     $('#customSwitch1').click(function() {
         var element = $("#t_elements");
         if(this.checked){
@@ -357,7 +371,7 @@ $(document).ready(function(e){
             $(".text_o_elements").remove();
         }
     });
-    //image_overlay toggle
+    //add image_overlay related html elements to DOM on enabling image_overlay
     $('#customSwitch2').click(function() {
         var element = $("#i_elements");
         if(this.checked){
@@ -371,7 +385,7 @@ $(document).ready(function(e){
             $(".image_o_elements").remove();
         }
     });
-    //color_settings toggle
+    //add color settings related html elements to DOM on enabling color_settings
     $('#customSwitch3').click(function() {
         var element = $("#c_elements");
         if(this.checked){
