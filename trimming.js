@@ -156,7 +156,6 @@ $(document).ready(function(e){
            }, 3000);
         }
     });
-
     //4 - remove clipped video and/or image from drag&drop area
     $("#sortable").on('click','.remove', function() {
         var id = this.id;
@@ -335,7 +334,6 @@ $(document).ready(function(e){
         document.getElementById('merged_url').innerText=vid_src.src;
         $('#JS_SDK').html("cld.videoTag(\""+pubID[order[base_vid]]+"\",{transformation:"+JSON.stringify(transformation_str)+", controls:true, format: \"mp4\"})");
     })
-
     //Choose an image from image search results for image overlay
     $("#I_search").click(function(e){
         e.preventDefault()
@@ -358,7 +356,6 @@ $(document).ready(function(e){
             i_o_pubID=document.getElementById('I_img').src.split('upload/')[1];
         }
     })
-    
     //add text_overlay related html elements to DOM on enabling text_overlay
     $('#customSwitch1').click(function() {
         var element = $("#t_elements");
@@ -399,6 +396,3 @@ $(document).ready(function(e){
     });
 
 })
-
-
-     
