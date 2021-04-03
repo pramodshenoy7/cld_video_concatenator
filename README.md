@@ -63,7 +63,7 @@ This is where most of the functionality of the app is implemented.
 ### cld_ml.js
 Handles Cloudinary image/video selection handlers
 
-## See the app in action - 
+## See the app in action - https://cld-video-concat.netlify.app/
 
 ## Quick demo of the app
 * merge 2 clipped videos and add an image at the beginning for 2 seconds
