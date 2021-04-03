@@ -1,0 +1,139 @@
+<html>
+<head>
+    <title>Video Concatenator</title>
+    <link href="node_modules/cloudinary-video-player/dist/cld-video-player.min.css" rel="stylesheet">
+    <script src="node_modules/lodash/lodash.js" type="text/javascript"></script>
+    <script src="node_modules/cloudinary-core/cloudinary-core.js" type="text/javascript"></script>
+    <script src="node_modules/cloudinary-video-player/dist/cld-video-player.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link href="bootstrap-image-checkbox.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+</head>
+<script>
+	$( function() {
+		$( "#sortable" ).sortable({
+            revert: true
+        });
+		$( "#sortable" ).disableSelection();
+	} );
+</script>
+<body>
+    <div class=container-fluid>
+        <img src="https://cloudinary-res.cloudinary.com/images/dpr_2.0/c_scale,w_auto,dpr_3.0/f_auto,q_auto/v1597847487/website/cloudinary_logo_blue_0720/cloudinary_logo_blue_0720.png"><br>
+        <br>
+        <div class="row">
+            <div class="col-4">
+                <form id="tag_search"> 
+                    <label style="font-weight: bold;font-size: larger;text-decoration: underline;">Search by Tag</label>
+                    <br>
+                    <label>Enter Tag to Search Videos:</label>
+                    <input type="text" id="tag" placeholder="eg.: logo">
+                    <button type="submit" class="btn-add-video">Search</button>
+                    <br>
+                    <label>Include Images</label>
+                    <input type="checkbox" id="include_images">
+                    <br><br>
+                </form>
+                <form id="ml">
+                    <label style="font-weight: bold;font-size: larger;text-decoration: underline;">Select Video from Media Library</label>
+                    <br>
+                    <input type="button" id="ml_1">
+                    <br><br>
+                </form>
+               
+                <form id="t_overlay">
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="customSwitch1">
+                        <label class="custom-control-label" for="customSwitch1">Text Overlay Settings</label>
+                    </div>
+                    <br>
+                    <div id="t_elements">
+    
+                    </div>
+                </form>
+                
+                <form id="i_overlay">
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="customSwitch2">
+                        <label class="custom-control-label" for="customSwitch2">Image Overlay</label>
+                    </div>
+                    <div hidden id="img_o">
+                        <input type="button" id="ml_2">
+                        <label>Or </label> 
+                        <button class="btn-add-video" style="width:50%;" id="I_search">Select an Image from Search Result</button>
+                    </div>
+                    <div id="i_elements">  
+                    </div>
+                </form>
+                <br>
+                <form id="color">
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="customSwitch3">
+                        <label class="custom-control-label" for="customSwitch3">Video Settings</label>
+                    </div>
+                    <div id="c_elements">
+                       
+                    </div>
+                </form>
+                <button class="btn-add-video" style="width:75%; height:50" id="concatenate">Concatenate</button>  
+            </div>
+            <div class="col-8" id="div-vid-grid">
+                <div class="row">
+                    <div class="col-6">
+                        <video id="demo-player" controls class="cld-video-player video-js vjs-16-9"></video>
+                    </div>
+                    <div class="col-6" id="div-img-grid">
+                        <div class="row" id="img-grid">
+        
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <form id="form-vid-clip">
+                            <br>
+                            <label>Start Time</label>
+                            <input type="text" size=5 placeholder="00:00" id="stime" pattern="\d\d:\d\d">
+                            <label>Start Time</label>
+                            <input type="text" size=5 placeholder="00:00" id="etime" pattern="\d\d:\d\d">&nbsp;
+                            <button type="submit" class="btn-add-video" id="clip-video">Clip Video</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <br><br>
+                        </form>
+                    </div>
+                    <div class="col-6">
+                        <div class="img_add_button">
+                            <br>
+                            <button class="btn-add-video" hidden="true" style="width:100%;" id="img_add">Add images to video</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div id="sortable" style="width: 100%;">
+                        <div class="element" id="div_1">
+                           
+                        </div>
+                    </div>   
+                </div>
+                <div class="row">
+                    <div class="merged_video">
+                        <br><br><br>
+                        <p id="merged"></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <p id="merged_url"></p>
+                    <code id="JS_SDK"></code>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="trimming.js"></script>
+<script src="https://media-library.cloudinary.com/global/all.js"></script>
+<script src="cld_ml.js"></script>
+</html>
+
