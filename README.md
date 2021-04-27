@@ -66,6 +66,6 @@ Handles Cloudinary image/video selection handlers
 ## See the app in action - https://cld-video-concat.netlify.app/
 
 ## Quick demo of the app
-* merge an image and 2 clipped videos. Image will presented in the first 2 seconds - [demo_1](https://res.cloudinary.com/pshenoy-demo/video/upload/v1617628822/cld_video_demo/demo_1.mp4)
+* merge an image and 2 clipped videos. Image will be presented in the first 2 seconds - [demo_1](https://res.cloudinary.com/pshenoy-demo/video/upload/v1617628822/cld_video_demo/demo_1.mp4)
 * merge 2 clipped videos, re-order them, add a text overlay and adjust brightness - [demo_2](https://res.cloudinary.com/pshenoy-demo/video/upload/v1617628822/cld_video_demo/demo_2.mp4)
 * merge 3 clipped videos, add 2 images in between the 3 videos, and add an image overlay - [demo_3](https://res.cloudinary.com/pshenoy-demo/video/upload/v1617628822/cld_video_demo/demo_3.mp4)
