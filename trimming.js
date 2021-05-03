@@ -180,7 +180,7 @@ $(document).ready(function(e){
     }
     //6 - concatenation
     $("#concatenate").click(function(e){
-        let w = 300, h=200;
+        let w = 1200, h=800;
         let crop="fill";
         let transformation_str=[];
         let order = [];             //stores the order of 
@@ -328,6 +328,7 @@ $(document).ready(function(e){
         let vid=el.getElementsByTagName('video')[0].cloneNode();
         let vid_src=el.getElementsByTagName('source')[1]
         vid.appendChild(vid_src)
+        vid.setAttribute("height", 300)
         $('#merged').html(vid)
         //display concatenated video URL and JS SDK
         document.getElementById('merged_url').setAttribute('href',vid_src.src)
