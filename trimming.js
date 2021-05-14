@@ -277,9 +277,11 @@ $(document).ready(function(e){
             if(t_gravity=="")t_gravity="south";
             var t_color=document.getElementById('T_color').value;
             var t_font=document.getElementById('T_font').value;
+            var t_x= document.getElementById('T_x').value===""?"0":document.getElementById('T_x').value;
+            var t_y= document.getElementById('T_y').value===""?"0":document.getElementById('T_y').value;
     
             for(i=0;i<total_element;i++){
-                transformation_str.push({overlay: new cloudinary.TextLayer().fontFamily(t_font).fontSize(t_size).text(text_o[order[i]]), gravity: t_gravity, color:t_color, y: 60, startOffset: ""+vid_start[order[i]],duration:""+dur[order[i]]})
+                transformation_str.push({overlay: new cloudinary.TextLayer().fontFamily(t_font).fontSize(t_size).text(text_o[order[i]]), gravity: t_gravity, color:t_color, y: parseInt(t_y), x: parseInt(t_x), startOffset: ""+vid_start[order[i]],duration:""+dur[order[i]]})
             }
         }
         //add image overlay
